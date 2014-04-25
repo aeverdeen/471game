@@ -22,6 +22,12 @@ namespace StepDX
         private Vector2 vSave;  // Velocity
         private Vector2 aSave;  // Acceleration
 
+        public enum SpriteType { One, Two, Three, Four, Player };
+
+        private SpriteType type = SpriteType.One;
+
+        public SpriteType T { set { type = value; } get { return type; } }
+
         public void SaveState()
         {
             pSave = p;

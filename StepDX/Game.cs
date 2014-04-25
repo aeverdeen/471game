@@ -74,6 +74,12 @@ namespace StepDX
         /// A stopwatch to use to keep track of time
         /// </summary>
         private System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+
+        /// <summary>
+        /// Font variable to display score
+        /// </summary>
+        private Microsoft.DirectX.Direct3D.Font font;
+        int score = 0;
         
         /// <summary>
         /// Initialize the Direct3D device for rendering
@@ -206,6 +212,19 @@ namespace StepDX
             AddEnemy(new Vector2(8, 2), 2);
             AddEnemy(new Vector2(10, 2), 3);
             AddEnemy(new Vector2(12, 2), 4);
+
+            //setting up the font
+            font = new Microsoft.DirectX.Direct3D.Font(device,  // Device we are drawing on
+                20,         // Font height in pixels
+                0,          // Font width in pixels or zero to match height
+                FontWeight.Bold,    // Font weight (Normal, Bold, etc.)
+                0,          // mip levels (0 for default)
+                false,      // italics?
+                CharacterSet.Default,   // Character set to use
+                Precision.Default,      // The font precision, try some of them...
+                FontQuality.Default,    // Quality?
+                PitchAndFamily.FamilyDoNotCare,     // Pitch and family, we don't care
+                "Terminal");               // And the name of the font
         }
 
 
@@ -244,6 +263,12 @@ namespace StepDX
 
             // Render the background
             background.Render();
+
+            //score display
+            font.DrawText(null,     // Because I say so
+                        "Score: " + score,  // Text to draw
+                        new Point(25, 15),  // Location on the display (pixels with 0,0 as upper left)
+                        Color.LightCyan);   // Font color
 
             foreach (Polygon p in lasers)
             {
@@ -346,12 +371,26 @@ namespace StepDX
                     hit = false;
                     if (tempenemies.Count() > 0)
                     {
-                        foreach (Polygon p in tempenemies)
+                        foreach (GameSprite p in tempenemies)
                         {
                             if (collision.Test(f, p))
                             {
                                 // Score a collision with p
                                 // and we won't need this laser anymore.
+                                switch (p.T)
+                                {
+                                    case GameSprite.SpriteType.One:
+                                    case GameSprite.SpriteType.Two:
+                                    case GameSprite.SpriteType.Three:
+                                        score += 100;
+                                        break;
+                                    case GameSprite.SpriteType.Four:
+                                        score += 200;
+                                        break;
+                                    default:
+                                        score += 0;
+                                        break;
+                                }
                                 hit = true;
                                 sounds.Explosion();
                             }
@@ -426,6 +465,7 @@ namespace StepDX
                     enemy.AddTex(new Vector2(1, 0.2f));
                     enemy.AddTex(new Vector2(1, 1));
                     enemy.AddTex(new Vector2(0, 1));
+                    enemy.T = GameSprite.SpriteType.Two;
                     break;
                 case 3:
                     enemy.AddVertex(new Vector2(-0.2f, 0.07f));
@@ -442,6 +482,7 @@ namespace StepDX
                     enemy.AddTex(new Vector2(1, 0.36f));
                     enemy.AddTex(new Vector2(1, 1));
                     enemy.AddTex(new Vector2(0, 1));
+                    enemy.T = GameSprite.SpriteType.Three;
                     break;
                 case 4:
                     enemy.AddVertex(new Vector2(-0.2f, 0));
@@ -458,6 +499,7 @@ namespace StepDX
                     enemy.AddTex(new Vector2(1, 0.55f));
                     enemy.AddTex(new Vector2(1, 0.8f));
                     enemy.AddTex(new Vector2(0, 0.8f));
+                    enemy.T = GameSprite.SpriteType.Four;
                     break;
                 default:
                     enemy.AddVertex(new Vector2(-0.2f, 0.15f));
@@ -474,6 +516,7 @@ namespace StepDX
                     enemy.AddTex(new Vector2(0.86f, 0.93f));
                     enemy.AddTex(new Vector2(0.14f, 0.93f));
                     enemy.AddTex(new Vector2(0, 0.5f));
+                    enemy.T = GameSprite.SpriteType.One;
                     break;
             }
 
