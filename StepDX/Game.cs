@@ -207,6 +207,7 @@ namespace StepDX
             player.Color = Color.Transparent;
             player.Transparent = true;
             player.P = new Vector2(2f, 2);
+            player.T = GameSprite.SpriteType.Player;
 
             AddEnemy(new Vector2(6, 2), 1);
             AddEnemy(new Vector2(8, 2), 2);
