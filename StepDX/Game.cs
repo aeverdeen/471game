@@ -74,6 +74,14 @@ namespace StepDX
 
         public float difficulty = 0;
 
+        private bool gameOver = false;
+
+        private int lives = 3;
+
+        private bool tookLife = false;
+
+        private float waitTime = 0;
+
         Random random = new Random((int)DateTime.Now.Ticks);
 
         /// <summary>
@@ -85,6 +93,8 @@ namespace StepDX
         /// Font variable to display score
         /// </summary>
         private Microsoft.DirectX.Direct3D.Font font;
+        private Microsoft.DirectX.Direct3D.Font gameOverFont;
+        private Microsoft.DirectX.Direct3D.Font endScoreFont;
         int score = 0;
         
         /// <summary>
@@ -113,56 +123,63 @@ namespace StepDX
         //TODO: Add up and down buttons for movement
         protected override void OnKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-                this.Close(); // Esc was pressed
-            else if (e.KeyCode == Keys.Right)
+            if (!gameOver)
             {
-                Vector2 v = player.V;
-                v.X = 2.5f;
-                player.V = v;
+                if (e.KeyCode == Keys.Escape)
+                    this.Close(); // Esc was pressed
+                else if (e.KeyCode == Keys.Right)
+                {
+                    Vector2 v = player.V;
+                    v.X = 2.5f;
+                    player.V = v;
+                }
+                else if (e.KeyCode == Keys.Left)
+                {
+                    Vector2 v = player.V;
+                    v.X = -2.5f;
+                    player.V = v;
+                }
+                else if (e.KeyCode == Keys.Up)
+                {
+                    Vector2 v = player.V;
+                    v.Y = 2.5f;
+                    player.V = v;
+                }
+                else if (e.KeyCode == Keys.Down)
+                {
+                    Vector2 v = player.V;
+                    v.Y = -2.5f;
+                    player.V = v;
+                }
+                else if (e.KeyCode == Keys.Space && stopwatch.ElapsedMilliseconds > lastShot + 400)
+                {
+                    //TODO: Make the player shoot
+                    AddLaser(player.P);
+                    sounds.Shoot();
+                    lastShot = stopwatch.ElapsedMilliseconds;
+                }
             }
-            else if (e.KeyCode == Keys.Left)
-            {
-                Vector2 v = player.V;
-                v.X = -2.5f;
-                player.V = v;
-            }
-            else if (e.KeyCode == Keys.Up)
-            {
-                Vector2 v = player.V;
-                v.Y = 2.5f;
-                player.V = v;
-            }
-            else if (e.KeyCode == Keys.Down)
-            {
-                Vector2 v = player.V;
-                v.Y = -2.5f;
-                player.V = v;
-            }
-            else if (e.KeyCode == Keys.Space && stopwatch.ElapsedMilliseconds > lastShot + 400)
-            {
-                //TODO: Make the player shoot
-                AddLaser(player.P);
-                sounds.Shoot();
-                lastShot = stopwatch.ElapsedMilliseconds;
-            }
-
+            else if (e.KeyCode == Keys.Escape)
+                this.Close(); // Exit
         }
 
         //TODO: Make this work for up and down for the player as well
         protected override void OnKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
+            if (!gameOver)
             {
-                Vector2 v = player.V;
-                v.X = 0;
-                player.V = v;
-            }
-            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
-            {
-                Vector2 v = player.V;
-                v.Y = 0;
-                player.V = v;
+                if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
+                {
+                    Vector2 v = player.V;
+                    v.X = 0;
+                    player.V = v;
+                }
+                else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+                {
+                    Vector2 v = player.V;
+                    v.Y = 0;
+                    player.V = v;
+                }
             }
         }
 
@@ -186,39 +203,37 @@ namespace StepDX
             stopwatch.Start();
             lastTime = stopwatch.ElapsedMilliseconds;
 
-            Texture spritetexture = TextureLoader.FromFile(device, "../../ship.bmp");
-            player.Tex = spritetexture;
+            if (!gameOver)
+            {
+                Texture spritetexture = TextureLoader.FromFile(device, "../../ship.bmp");
+                player.Tex = spritetexture;
 
-            float L = 0.225f;
-            float Y = 0.05f;
+                float L = 0.225f;
+                float Y = 0.05f;
 
-            player.AddVertex(new Vector2(-L, L));
-            player.AddTex(new Vector2(Y, 0));
+                player.AddVertex(new Vector2(-L, L));
+                player.AddTex(new Vector2(Y, 0));
 
-            player.AddVertex(new Vector2(0, L));
-            player.AddTex(new Vector2(0.5f, 0));
+                player.AddVertex(new Vector2(0, L));
+                player.AddTex(new Vector2(0.5f, 0));
 
-            player.AddVertex(new Vector2(L, 0.005f));
-            player.AddTex(new Vector2(1.0f-Y, 0.5f-0.005f));
+                player.AddVertex(new Vector2(L, 0.005f));
+                player.AddTex(new Vector2(1.0f - Y, 0.5f - 0.005f));
 
-            player.AddVertex(new Vector2(L, -0.005f));
-            player.AddTex(new Vector2(1.0f-Y, 0.5f+0.005f));
+                player.AddVertex(new Vector2(L, -0.005f));
+                player.AddTex(new Vector2(1.0f - Y, 0.5f + 0.005f));
 
-            player.AddVertex(new Vector2(0, -L));
-            player.AddTex(new Vector2(0.5f, 1));
+                player.AddVertex(new Vector2(0, -L));
+                player.AddTex(new Vector2(0.5f, 1));
 
-            player.AddVertex(new Vector2(-L, -L));
-            player.AddTex(new Vector2(Y, 1));
+                player.AddVertex(new Vector2(-L, -L));
+                player.AddTex(new Vector2(Y, 1));
 
-            player.Color = Color.Transparent;
-            player.Transparent = true;
-            player.P = new Vector2(2f, 2);
-            player.T = GameSprite.SpriteType.Player;
-
-            //AddEnemy(new Vector2(6, 2), 1);
-            //AddEnemy(new Vector2(8, 2), 2);
-            //AddEnemy(new Vector2(10, 2), 3);
-            //AddEnemy(new Vector2(12, 2), 4);
+                player.Color = Color.Transparent;
+                player.Transparent = true;
+                player.P = new Vector2(2f, 2);
+                player.T = GameSprite.SpriteType.Player;
+            }
 
             //setting up the font
             font = new Microsoft.DirectX.Direct3D.Font(device,  // Device we are drawing on
@@ -232,6 +247,11 @@ namespace StepDX
                 FontQuality.Default,    // Quality?
                 PitchAndFamily.FamilyDoNotCare,     // Pitch and family, we don't care
                 "Terminal");               // And the name of the font
+
+            gameOverFont = new Microsoft.DirectX.Direct3D.Font(device, 100, 0, FontWeight.Bold, 0, false, CharacterSet.Default,
+                Precision.Default, FontQuality.Default, PitchAndFamily.FamilyDoNotCare, "Terminal");
+            endScoreFont = new Microsoft.DirectX.Direct3D.Font(device, 30, 0, FontWeight.Bold, 0, false, CharacterSet.Default,
+                Precision.Default, FontQuality.Default, PitchAndFamily.FamilyDoNotCare, "Terminal");
         }
 
 
@@ -256,10 +276,7 @@ namespace StepDX
             float widP = playingH * aspect;         // Total width of window
             
             float winCenter = player.P.X;
-            //if (winCenter - widP / 2 < 0)
-                winCenter = widP / 2;
-            //else if (winCenter + widP / 2 > playingW)
-                //winCenter = playingW - widP / 2;
+            winCenter = widP / 2;
 
             device.Transform.Projection = Matrix.OrthoOffCenterLH(winCenter - widP / 2,
                                                                   winCenter + widP / 2,
@@ -271,21 +288,37 @@ namespace StepDX
             // Render the background
             background.Render();
 
-            //score display
-            font.DrawText(null,     // Because I say so
-                        "Score: " + score,  // Text to draw
-                        new Point(25, 15),  // Location on the display (pixels with 0,0 as upper left)
-                        Color.LightCyan);   // Font color
-
-            foreach (Polygon p in lasers)
+            //game over
+            if (gameOver)
             {
-                p.Render(device);
+                //210 and 100 are rough offsets for the the length of 'game over'
+                gameOverFont.DrawText(null, "GAME OVER", new Point((int)wid/2 - 210, (int)hit/2 - 100), Color.WhiteSmoke);
+                endScoreFont.DrawText(null, "Final Score: " + score, new Point((int)wid / 2 - 115, (int)hit / 2 + 30), Color.WhiteSmoke);
             }
 
-            foreach (Polygon p in enemies)
-                p.Render(device);
+            else
+            {
+                //score display
+                font.DrawText(null,     // Because I say so
+                            "Score: " + score,  // Text to draw
+                            new Point(25, 15),  // Location on the display (pixels with 0,0 as upper left)
+                            Color.WhiteSmoke);   // Font color
 
-            player.Render(device);
+                //lives display
+                font.DrawText(null, "Lives: " + lives, new Point(25, 40), Color.WhiteSmoke);
+
+                foreach (Polygon p in lasers)
+                {
+                    p.Render(device);
+                }
+
+                foreach (Polygon p in enemies)
+                    p.Render(device);
+
+                if (!tookLife) player.Render(device);
+                //flash player sprite when hit by enemy
+                else if (waitTime % 10 == 0) player.Render(device);
+            }
 
             //End the scene
             device.EndScene();
@@ -297,11 +330,18 @@ namespace StepDX
         /// </summary>
         public void Advance()
         {
-
             // How much time change has there been?
             long time = stopwatch.ElapsedMilliseconds;
             float delta = (time - lastTime) * 0.001f;       // Delta time in milliseconds
             lastTime = time;
+
+            //invincible for a second or so
+            if (tookLife && waitTime < 80) waitTime += 1;
+            else
+            {
+                waitTime = 0;
+                tookLife = false;
+            }
 
             Vector2 q = player.V;
             Vector2 r = player.P;
@@ -368,18 +408,18 @@ namespace StepDX
                 {
                     if (collision.Test(player, p))
                     {
-                        float depth = collision.P1inP2 ?
-                                  collision.Depth : -collision.Depth;
-                        player.P = player.P + collision.N * depth;
-                        Vector2 v = player.V;
-                        if (collision.N.X != 0)
-                            v.X = 0;
-                        if (collision.N.Y != 0)
-                            v.Y = 0;
-                        player.V = v;
+                        //player hit an enemy, take a life if not invincible
+                        if (!tookLife)
+                        {
+                            lives -= 1;
+                            tookLife = true;
+                        }
+                        //you died
+                        if(lives < 1) gameOver = true;
                         player.Advance(0);
                     }
                 }
+
 
                 List<Polygon> newlasers = new List<Polygon>();
                 List<Polygon> tempenemies = enemies;

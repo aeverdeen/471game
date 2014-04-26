@@ -46,3 +46,12 @@ C:\Users\Bloopert\Desktop\471game-master\StepDX\obj\x86\Debug\StepDX.exe
 E:\Downloads\471game-master\471game-master\StepDX\bin\Debug\StepDX.exe.config
 E:\Downloads\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.exe
 E:\Downloads\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.pdb
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\bin\Debug\StepDX.exe.config
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.pdb
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\bin\Debug\StepDX.exe
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\bin\Debug\StepDX.pdb
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\obj\x86\Debug\Project3.csprojResolveAssemblyReference.cache
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.Game.resources
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.Properties.Resources.resources
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\obj\x86\Debug\Project3.csproj.GenerateResource.Cache
+C:\Users\Stephanie\Documents\School\cse471\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.exe
