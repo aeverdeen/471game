@@ -70,6 +70,12 @@ namespace StepDX
 
         private long lastShot;
 
+        private long lastSpawn;
+
+        public float difficulty = 0;
+
+        Random random = new Random((int)DateTime.Now.Ticks);
+
         /// <summary>
         /// A stopwatch to use to keep track of time
         /// </summary>
@@ -209,10 +215,10 @@ namespace StepDX
             player.P = new Vector2(2f, 2);
             player.T = GameSprite.SpriteType.Player;
 
-            AddEnemy(new Vector2(6, 2), 1);
-            AddEnemy(new Vector2(8, 2), 2);
-            AddEnemy(new Vector2(10, 2), 3);
-            AddEnemy(new Vector2(12, 2), 4);
+            //AddEnemy(new Vector2(6, 2), 1);
+            //AddEnemy(new Vector2(8, 2), 2);
+            //AddEnemy(new Vector2(10, 2), 3);
+            //AddEnemy(new Vector2(12, 2), 4);
 
             //setting up the font
             font = new Microsoft.DirectX.Direct3D.Font(device,  // Device we are drawing on
@@ -291,6 +297,7 @@ namespace StepDX
         /// </summary>
         public void Advance()
         {
+
             // How much time change has there been?
             long time = stopwatch.ElapsedMilliseconds;
             float delta = (time - lastTime) * 0.001f;       // Delta time in milliseconds
@@ -298,6 +305,18 @@ namespace StepDX
 
             Vector2 q = player.V;
             Vector2 r = player.P;
+
+            difficulty+=delta/150;
+
+            if (stopwatch.ElapsedMilliseconds > (lastSpawn + 750-difficulty*50))
+            {
+                float randomNumber = random.Next(50,400);
+                int randomType = random.Next(1, 5);
+
+                AddEnemy(new Vector2(7, randomNumber/100), randomType);
+
+                lastSpawn = stopwatch.ElapsedMilliseconds;
+            }
 
             //These added borders, is there a better way to do this?
             if (player.P.X < 0.1f)
@@ -381,13 +400,26 @@ namespace StepDX
                                 switch (p.T)
                                 {
                                     case GameSprite.SpriteType.One:
-                                    case GameSprite.SpriteType.Two:
-                                    case GameSprite.SpriteType.Three:
                                         score += 100;
                                         break;
-                                    case GameSprite.SpriteType.Four:
-                                        score += 200;
+                                    case GameSprite.SpriteType.Two:
+                                        score += 100;
                                         break;
+                                    case GameSprite.SpriteType.Three:
+                                        score += 250;
+                                        break;
+                                    case GameSprite.SpriteType.Four:
+                                        if (p.health == 1)
+                                        {
+                                            score += 300;
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            p.health -= 1;
+                                            newenemies.Add(p);
+                                            break;
+                                        }
                                     default:
                                         score += 0;
                                         break;
@@ -414,6 +446,7 @@ namespace StepDX
                 delta -= step;
             }
         }
+
 
         public void AddLaser(Vector2 p)
         {
@@ -444,6 +477,7 @@ namespace StepDX
             lasers.Add(obs);
         }
 
+
         public void AddEnemy(Vector2 p, int type)
         {
             GameSprite enemy = new GameSprite();
@@ -452,6 +486,7 @@ namespace StepDX
             switch (type)
             {
                 case 2:
+                    enemy.V = new Vector2(-1.3f - difficulty, 0);
                     enemy.AddVertex(new Vector2(-0.2f, 0.09f));
                     enemy.AddVertex(new Vector2(-0.065f, 0.15f));
                     enemy.AddVertex(new Vector2(0.065f, 0.15f));
@@ -469,6 +504,7 @@ namespace StepDX
                     enemy.T = GameSprite.SpriteType.Two;
                     break;
                 case 3:
+                    enemy.V = new Vector2(-0.8f - difficulty, 0);
                     enemy.AddVertex(new Vector2(-0.2f, 0.07f));
                     enemy.AddVertex(new Vector2(-0.07f, 0.2f));
                     enemy.AddVertex(new Vector2(0.07f, 0.2f));
@@ -486,6 +522,7 @@ namespace StepDX
                     enemy.T = GameSprite.SpriteType.Three;
                     break;
                 case 4:
+                    enemy.V = new Vector2(-0.5f - difficulty, 0);
                     enemy.AddVertex(new Vector2(-0.2f, 0));
                     enemy.AddVertex(new Vector2(-0.05f, 0.15f));
                     enemy.AddVertex(new Vector2(0.05f, 0.15f));
@@ -503,6 +540,8 @@ namespace StepDX
                     enemy.T = GameSprite.SpriteType.Four;
                     break;
                 default:
+                    float newDifficulty = (float)difficulty * 1.5f;
+                    enemy.V = new Vector2(-3.5f - newDifficulty, 0);
                     enemy.AddVertex(new Vector2(-0.2f, 0.15f));
                     enemy.AddVertex(new Vector2(0.2f, 0.15f));
                     enemy.AddVertex(new Vector2(0.2f, 0));
@@ -526,7 +565,6 @@ namespace StepDX
             enemy.P = p;
             //This sets the original velocity. 
             //TODO: Figure out how to change Y velocity depending on enemy
-            enemy.V = new Vector2(-1.5f, 0);
             enemies.Add(enemy);
         }
     }

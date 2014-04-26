@@ -10,11 +10,18 @@ namespace StepDX
 {
     public class GameSprite : PolygonTextured
     {
+
         private Vector2 p = new Vector2(0, 0);  // Position
         private Vector2 v = new Vector2(0, 0);  // Velocity
         private Vector2 a = new Vector2(0, 0);  // Acceleration
+        
 
-        public Vector2 P { set { p = value; } get { return p; } }
+        public int health = 5;
+
+        public float initialY;
+
+
+        public Vector2 P { set { p = value; initialY = value.Y; } get { return p; } }
         public Vector2 V { set { v = value; } get { return v; } }
         public Vector2 A { set { a = value; } get { return a; } }
 
@@ -48,12 +55,23 @@ namespace StepDX
 
         public override void Advance(float dt)
         {
+            initialY = initialY / 2 + 1;
             // Euler steps
+
             v.X += a.X * dt;
             v.Y += a.Y * dt;
             p.X += v.X * dt;
             p.Y += v.Y * dt;
-            
+
+            if (type == SpriteType.Two)
+            {
+                p.Y = initialY + (float)(Math.Sin( p.X * 1.3 ));
+            }
+            else if (type == SpriteType.Three)
+            {
+                p.Y = initialY + (float)(1.5 * Math.Sin( p.X * 3.3 ));
+            }
+
             // Move the vertices
             verticesM.Clear();
             foreach (Vector2 x in verticesB)

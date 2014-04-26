@@ -34,3 +34,15 @@ E:\Documents\Visual Studio 2010\Projects\471game-master\StepDX\obj\x86\Debug\Ste
 E:\Documents\Visual Studio 2010\Projects\471game-master\StepDX\obj\x86\Debug\StepDX.Properties.Resources.resources
 E:\Documents\Visual Studio 2010\Projects\471game-master\StepDX\obj\x86\Debug\Project3.csproj.GenerateResource.Cache
 E:\Documents\Visual Studio 2010\Projects\471game-master\StepDX\obj\x86\Debug\StepDX.exe
+C:\Users\Bloopert\Desktop\471game-master\StepDX\bin\Debug\StepDX.exe.config
+C:\Users\Bloopert\Desktop\471game-master\StepDX\obj\x86\Debug\StepDX.pdb
+C:\Users\Bloopert\Desktop\471game-master\StepDX\bin\Debug\StepDX.exe
+C:\Users\Bloopert\Desktop\471game-master\StepDX\bin\Debug\StepDX.pdb
+C:\Users\Bloopert\Desktop\471game-master\StepDX\obj\x86\Debug\Project3.csprojResolveAssemblyReference.cache
+C:\Users\Bloopert\Desktop\471game-master\StepDX\obj\x86\Debug\StepDX.Game.resources
+C:\Users\Bloopert\Desktop\471game-master\StepDX\obj\x86\Debug\StepDX.Properties.Resources.resources
+C:\Users\Bloopert\Desktop\471game-master\StepDX\obj\x86\Debug\Project3.csproj.GenerateResource.Cache
+C:\Users\Bloopert\Desktop\471game-master\StepDX\obj\x86\Debug\StepDX.exe
+E:\Downloads\471game-master\471game-master\StepDX\bin\Debug\StepDX.exe.config
+E:\Downloads\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.exe
+E:\Downloads\471game-master\471game-master\StepDX\obj\x86\Debug\StepDX.pdb
