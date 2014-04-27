@@ -82,6 +82,15 @@ namespace StepDX
 
         private float waitTime = 0;
 
+
+        //Upgrade stuff
+        private int laserLevel = 1;
+        private int laserCost = 1000;
+        private int shipLevel = 1;
+        private int shipCost = 1000;
+        private int lifeCost = 5000;
+
+
         Random random = new Random((int)DateTime.Now.Ticks);
 
         /// <summary>
@@ -96,6 +105,7 @@ namespace StepDX
         private Microsoft.DirectX.Direct3D.Font gameOverFont;
         private Microsoft.DirectX.Direct3D.Font endScoreFont;
         int score = 0;
+        int currency = 0;
         
         /// <summary>
         /// Initialize the Direct3D device for rendering
@@ -130,28 +140,55 @@ namespace StepDX
                 else if (e.KeyCode == Keys.Right)
                 {
                     Vector2 v = player.V;
-                    v.X = 2.5f;
+                    v.X = 2.5f + (float)(.5 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Left)
                 {
                     Vector2 v = player.V;
-                    v.X = -2.5f;
+                    v.X = -2.5f - (float)(.5 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Up)
                 {
                     Vector2 v = player.V;
-                    v.Y = 2.5f;
+                    v.Y = 2.5f + (float)(.5 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Down)
                 {
                     Vector2 v = player.V;
-                    v.Y = -2.5f;
+                    v.Y = -2.5f - (float)(.5 * shipLevel);
                     player.V = v;
                 }
-                else if (e.KeyCode == Keys.Space && stopwatch.ElapsedMilliseconds > lastShot + 400)
+                else if (e.KeyCode == Keys.Q)
+                {
+                    if (currency > laserCost)
+                    {
+                        currency -= laserCost;
+                        laserCost += laserLevel * 500;
+                        laserLevel++;
+                    }
+                }
+                else if (e.KeyCode == Keys.W)
+                {
+                    if (currency > shipCost)
+                    {
+                        currency -= shipCost;
+                        shipCost += shipLevel * 1000;
+                        shipLevel++;
+                    }
+                }
+                else if (e.KeyCode == Keys.E)
+                {
+                    if (currency > lifeCost)
+                    {
+                        currency -= lifeCost;
+                        lifeCost += 10000;
+                        lives++;
+                    }
+                }
+                else if (e.KeyCode == Keys.Space && stopwatch.ElapsedMilliseconds > lastShot + 410 - laserLevel*10)
                 {
                     //TODO: Make the player shoot
                     AddLaser(player.P);
@@ -304,8 +341,15 @@ namespace StepDX
                             new Point(25, 15),  // Location on the display (pixels with 0,0 as upper left)
                             Color.WhiteSmoke);   // Font color
 
+                //Currency display
+                font.DrawText(null, "Money: " + currency, new Point(25, 40), Color.WhiteSmoke);   // Font color
+
                 //lives display
-                font.DrawText(null, "Lives: " + lives, new Point(25, 40), Color.WhiteSmoke);
+                font.DrawText(null, "Lives: " + lives, new Point(25, 65), Color.WhiteSmoke);
+
+                font.DrawText(null, "Q: Pay " + laserCost + " for laser level " + (laserLevel+1), new Point(820, 15), Color.WhiteSmoke);
+                font.DrawText(null, "W: Pay " + shipCost + " for ship level " + (shipLevel+1), new Point(820, 40), Color.WhiteSmoke);
+                font.DrawText(null, "E: Pay " + lifeCost + " for extra life", new Point(820, 65), Color.WhiteSmoke);  
 
                 foreach (Polygon p in lasers)
                 {
@@ -441,16 +485,20 @@ namespace StepDX
                                 {
                                     case GameSprite.SpriteType.One:
                                         score += 100;
+                                        currency += 100;
                                         break;
                                     case GameSprite.SpriteType.Two:
                                         score += 100;
+                                        currency += 100;
                                         break;
                                     case GameSprite.SpriteType.Three:
                                         score += 250;
+                                        currency += 250;
                                         break;
                                     case GameSprite.SpriteType.Four:
                                         if (p.health == 1)
                                         {
+                                            currency += 300;
                                             score += 300;
                                             break;
                                         }
