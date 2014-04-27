@@ -482,20 +482,24 @@ namespace StepDX
                                     case GameSprite.SpriteType.One:
                                         score += 100;
                                         Explosion(p.P);
+                                        sounds.Explosion();
                                         break;
                                     case GameSprite.SpriteType.Two:
                                         score += 100;
                                         Explosion(p.P);
+                                        sounds.Explosion();
                                         break;
                                     case GameSprite.SpriteType.Three:
                                         score += 250;
                                         Explosion(p.P);
+                                        sounds.Explosion();
                                         break;
                                     case GameSprite.SpriteType.Four:
                                         if (p.health <= 1)
                                         {
                                             score += 300;
                                             Explosion(p.P);
+                                            sounds.Explosion();
                                             break;
                                         }
                                         else
@@ -509,7 +513,6 @@ namespace StepDX
                                         break;
                                 }
                                 hit = true;
-                                sounds.Explosion();
                             }
                             else
                             {
