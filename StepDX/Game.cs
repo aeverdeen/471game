@@ -49,6 +49,11 @@ namespace StepDX
         List<Polygon> lasers = new List<Polygon>();
 
         /// <summary>
+        /// All of the explosions
+        /// </summary>
+        List<Polygon> explosions = new List<Polygon>();
+
+        /// <summary>
         /// Our player sprite
         /// </summary>
         GameSprite player = new GameSprite();
@@ -307,6 +312,9 @@ namespace StepDX
                 //lives display
                 font.DrawText(null, "Lives: " + lives, new Point(25, 40), Color.WhiteSmoke);
 
+                foreach (Polygon p in explosions)
+                    p.Render(device);
+
                 foreach (Polygon p in lasers)
                 {
                     p.Render(device);
@@ -342,6 +350,34 @@ namespace StepDX
                 waitTime = 0;
                 tookLife = false;
             }
+
+            List<Polygon> keepLaser = new List<Polygon>();
+            List<Polygon> keepEnemy = new List<Polygon>();
+            List<Polygon> keepExp = new List<Polygon>();
+
+            foreach (GameSprite p in lasers)
+            {
+                if(p.P.X < 7.6)
+                    keepLaser.Add(p);
+            }
+
+            lasers = keepLaser;
+
+            foreach (GameSprite p in enemies)
+            {
+                if(p.P.X > 0)
+                    keepEnemy.Add(p);
+            }
+
+            enemies = keepEnemy;
+
+            foreach (Explosion p in explosions)
+            {
+                if (!p.getRidOf)
+                    keepExp.Add(p);
+            }
+
+            explosions = keepExp;
 
             Vector2 q = player.V;
             Vector2 r = player.P;
@@ -404,6 +440,9 @@ namespace StepDX
                 foreach (Polygon p in enemies)
                     p.Advance(step);
 
+                foreach (Polygon p in explosions)
+                    p.Advance(step);
+
                 foreach (Polygon p in enemies)
                 {
                     if (collision.Test(player, p))
@@ -413,6 +452,7 @@ namespace StepDX
                         {
                             lives -= 1;
                             tookLife = true;
+                            sounds.Explosion();
                         }
                         //you died
                         if(lives < 1) gameOver = true;
@@ -441,17 +481,21 @@ namespace StepDX
                                 {
                                     case GameSprite.SpriteType.One:
                                         score += 100;
+                                        Explosion(p.P);
                                         break;
                                     case GameSprite.SpriteType.Two:
                                         score += 100;
+                                        Explosion(p.P);
                                         break;
                                     case GameSprite.SpriteType.Three:
                                         score += 250;
+                                        Explosion(p.P);
                                         break;
                                     case GameSprite.SpriteType.Four:
-                                        if (p.health == 1)
+                                        if (p.health <= 1)
                                         {
                                             score += 300;
+                                            Explosion(p.P);
                                             break;
                                         }
                                         else
@@ -603,9 +647,32 @@ namespace StepDX
             enemy.Color = Color.Transparent;
             enemy.Transparent = true;
             enemy.P = p;
-            //This sets the original velocity. 
-            //TODO: Figure out how to change Y velocity depending on enemy
             enemies.Add(enemy);
+        }
+
+        public void Explosion(Vector2 p)
+        {
+            float left = -0.2f;
+            float right = 0.2f;
+            float top = 0.2f;
+            float bottom = -0.2f;
+            Explosion exp = new Explosion();
+
+            Texture exptexture = TextureLoader.FromFile(device, "../../explosion.bmp");
+            exp.Tex = exptexture;
+
+            exp.AddVertex(new Vector2(left, bottom));
+            exp.AddVertex(new Vector2(left, top));
+            exp.AddVertex(new Vector2(right, top));
+            exp.AddVertex(new Vector2(right, bottom)); 
+            exp.AddTex(new Vector2(0, 1));
+            exp.AddTex(new Vector2(0, 0));
+            exp.AddTex(new Vector2(1, 0));
+            exp.AddTex(new Vector2(1, 1));
+            exp.Color = Color.Transparent;
+            exp.Transparent = true;
+            exp.P = p;
+            explosions.Add(exp);
         }
     }
 }

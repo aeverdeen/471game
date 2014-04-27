@@ -11,12 +11,12 @@ namespace StepDX
     public class GameSprite : PolygonTextured
     {
 
-        private Vector2 p = new Vector2(0, 0);  // Position
-        private Vector2 v = new Vector2(0, 0);  // Velocity
-        private Vector2 a = new Vector2(0, 0);  // Acceleration
+        protected Vector2 p = new Vector2(0, 0);  // Position
+        protected Vector2 v = new Vector2(0, 0);  // Velocity
+        protected Vector2 a = new Vector2(0, 0);  // Acceleration
         
 
-        public int health = 5;
+        public int health = 3;
 
         public float initialY;
 
@@ -31,7 +31,7 @@ namespace StepDX
 
         public enum SpriteType { One, Two, Three, Four, Player };
 
-        private SpriteType type = SpriteType.One;
+        protected SpriteType type = SpriteType.One;
 
         public SpriteType T { set { type = value; } get { return type; } }
 
