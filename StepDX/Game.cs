@@ -145,25 +145,25 @@ namespace StepDX
                 else if (e.KeyCode == Keys.Right)
                 {
                     Vector2 v = player.V;
-                    v.X = 2.5f + (float)(.5 * shipLevel);
+                    v.X = 2f + (float)(.5 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Left)
                 {
                     Vector2 v = player.V;
-                    v.X = -2.5f - (float)(.5 * shipLevel);
+                    v.X = -2f - (float)(.5 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Up)
                 {
                     Vector2 v = player.V;
-                    v.Y = 2.5f + (float)(.5 * shipLevel);
+                    v.Y = 2f + (float)(.5 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Down)
                 {
                     Vector2 v = player.V;
-                    v.Y = -2.5f - (float)(.5 * shipLevel);
+                    v.Y = -2f - (float)(.5 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Q)
