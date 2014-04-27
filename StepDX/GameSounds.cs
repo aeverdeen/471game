@@ -55,8 +55,8 @@ namespace StepDX
             if (shoot == null)
                 return;
 
-            if (!shoot.Status.Playing)
-                shoot.Play(0, BufferPlayFlags.Default);
+            shoot.SetCurrentPosition(0);
+            shoot.Play(0, BufferPlayFlags.Default);
         }
 
         public void Soundtrack()
