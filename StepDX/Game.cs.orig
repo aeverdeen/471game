@@ -525,21 +525,30 @@ namespace StepDX
                                 {
                                     case GameSprite.SpriteType.One:
                                         score += 100;
-                                        Explosion(p.P);
+<<<<<<< HEAD
                                         currency += 100;
-                                        sounds.Explosion();
                                         break;
                                     case GameSprite.SpriteType.Two:
                                         score += 100;
                                         currency += 100;
+                                        break;
+                                    case GameSprite.SpriteType.Three:
+                                        score += 250;
+                                        currency += 250;
+=======
+                                        Explosion(p.P);
+                                        sounds.Explosion();
+                                        break;
+                                    case GameSprite.SpriteType.Two:
+                                        score += 100;
                                         Explosion(p.P);
                                         sounds.Explosion();
                                         break;
                                     case GameSprite.SpriteType.Three:
                                         score += 250;
-                                        currency += 250;
                                         Explosion(p.P);
                                         sounds.Explosion();
+>>>>>>> 9491e855dd105468ee320f9bc9937154aad8ed48
                                         break;
                                     case GameSprite.SpriteType.Four:
                                         if (p.health <= 1)
