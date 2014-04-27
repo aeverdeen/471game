@@ -22,6 +22,11 @@ namespace StepDX
                 game.Advance();
                 game.Render();
                 Application.DoEvents();
+                if (game.Restart == true)
+                {
+                    game = new Game();
+                    game.Show();
+                }
             } while (game.Created);
         }
     }

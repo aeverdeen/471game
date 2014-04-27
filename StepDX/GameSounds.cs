@@ -15,6 +15,9 @@ namespace StepDX
         private SecondaryBuffer explosion = null;
         private SecondaryBuffer shoot = null;
         private SecondaryBuffer soundtrack = null;
+        private SecondaryBuffer gover = null;
+        private SecondaryBuffer cash = null;
+
 
         public GameSounds(Form form)
         {
@@ -22,9 +25,11 @@ namespace StepDX
             SoundDevice.SetCooperativeLevel(form, CooperativeLevel.Priority);
 
             Load(ref shoot, "../../shoot.wav");
-            Load(ref soundtrack, "../../shoot.wav");
+            Load(ref soundtrack, "../../track.wav");
 
             Load(ref explosion, "../../explosion.wav");
+            Load(ref gover, "../../gameOver.wav");
+            Load(ref cash, "../../cash.wav");
         }
 
         private void Load(ref SecondaryBuffer buffer, string filename)
@@ -59,6 +64,23 @@ namespace StepDX
             shoot.Play(0, BufferPlayFlags.Default);
         }
 
+        public void Gover()
+        {
+            if (gover == null)
+                return;
+
+            gover.SetCurrentPosition(0);
+            gover.Play(0, BufferPlayFlags.Default);
+        }
+
+        public void Cash()
+        {
+            if (cash == null)
+                return;
+
+            cash.SetCurrentPosition(0);
+            cash.Play(0, BufferPlayFlags.Default);
+        }
         public void Soundtrack()
         {
             if (soundtrack == null)
@@ -68,6 +90,7 @@ namespace StepDX
             {
                 soundtrack.SetCurrentPosition(0);
                 soundtrack.Play(0, BufferPlayFlags.Default);
+
             }
         }
 
@@ -77,7 +100,10 @@ namespace StepDX
                 return;
 
             if (soundtrack.Status.Playing)
+            {
+                soundtrack.Volume = (int)Volume.Min;
                 soundtrack.Stop();
+            }
         }
 
     }

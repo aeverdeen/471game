@@ -87,6 +87,9 @@ namespace StepDX
 
         private float waitTime = 0;
 
+        private bool restart = false;
+        public bool Restart { get { return restart; } }
+
 
         //Upgrade stuff
         private int laserLevel = 1;
@@ -170,6 +173,7 @@ namespace StepDX
                 {
                     if (currency > laserCost)
                     {
+                        sounds.Cash();
                         currency -= laserCost;
                         laserCost += laserLevel * 500;
                         laserLevel++;
@@ -179,6 +183,7 @@ namespace StepDX
                 {
                     if (currency > shipCost)
                     {
+                        sounds.Cash();
                         currency -= shipCost;
                         shipCost += shipLevel * 1000;
                         shipLevel++;
@@ -188,18 +193,24 @@ namespace StepDX
                 {
                     if (currency > lifeCost)
                     {
+                        sounds.Cash();
                         currency -= lifeCost;
                         lifeCost += 10000;
                         lives++;
                     }
                 }
-                else if (e.KeyCode == Keys.Space && stopwatch.ElapsedMilliseconds > lastShot + 410 - laserLevel*10)
+                else if (e.KeyCode == Keys.Space && stopwatch.ElapsedMilliseconds > lastShot + 410 - laserLevel*15)
                 {
                     //TODO: Make the player shoot
                     AddLaser(player.P);
                     sounds.Shoot();
                     lastShot = stopwatch.ElapsedMilliseconds;
                 }
+            }
+            else if (e.KeyCode == Keys.R)
+            {
+                restart = true;
+                this.Close();
             }
             else if (e.KeyCode == Keys.Escape)
                 this.Close(); // Exit
@@ -301,7 +312,7 @@ namespace StepDX
         public void Render()
         {
             //This is the soundtrack. This can be changed if necessary
-            //sounds.Soundtrack();
+            sounds.Soundtrack();
             if (device == null)
                 return;
 
@@ -332,10 +343,11 @@ namespace StepDX
 
             //game over
             if (gameOver)
-            {
+            {   
                 //210 and 100 are rough offsets for the the length of 'game over'
                 gameOverFont.DrawText(null, "GAME OVER", new Point((int)wid/2 - 210, (int)hit/2 - 100), Color.WhiteSmoke);
                 endScoreFont.DrawText(null, "Final Score: " + score, new Point((int)wid / 2 - 115, (int)hit / 2 + 30), Color.WhiteSmoke);
+                font.DrawText(null, "R: Restart ", new Point(820, 15), Color.WhiteSmoke);
             }
 
             else
@@ -496,10 +508,17 @@ namespace StepDX
                         {
                             lives -= 1;
                             tookLife = true;
-                            sounds.Explosion();
+                            if(lives >= 0)
+                                sounds.Explosion();
                         }
                         //you died
-                        if(lives < 1) gameOver = true;
+                        if (lives < 1)
+                        {
+                            gameOver = true;
+                            sounds.SoundtrackEnd();
+                        }
+                        if (lives == 0)
+                            sounds.Gover();
                         player.Advance(0);
                     }
                 }
