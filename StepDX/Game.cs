@@ -343,7 +343,10 @@ namespace StepDX
 
             //game over
             if (gameOver)
-            {   
+            {
+                enemies.Clear();
+                lasers.Clear();
+                explosions.Clear();
                 //210 and 100 are rough offsets for the the length of 'game over'
                 gameOverFont.DrawText(null, "GAME OVER", new Point((int)wid/2 - 210, (int)hit/2 - 100), Color.WhiteSmoke);
                 endScoreFont.DrawText(null, "Final Score: " + score, new Point((int)wid / 2 - 115, (int)hit / 2 + 30), Color.WhiteSmoke);
