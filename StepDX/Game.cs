@@ -148,25 +148,25 @@ namespace StepDX
                 else if (e.KeyCode == Keys.Right)
                 {
                     Vector2 v = player.V;
-                    v.X = 2f + (float)(.5 * shipLevel);
+                    v.X = 2f + (float)(.05 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Left)
                 {
                     Vector2 v = player.V;
-                    v.X = -2f - (float)(.5 * shipLevel);
+                    v.X = -2f - (float)(.05 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Up)
                 {
                     Vector2 v = player.V;
-                    v.Y = 2f + (float)(.5 * shipLevel);
+                    v.Y = 2f + (float)(.05 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Down)
                 {
                     Vector2 v = player.V;
-                    v.Y = -2f - (float)(.5 * shipLevel);
+                    v.Y = -2f - (float)(.05 * shipLevel);
                     player.V = v;
                 }
                 else if (e.KeyCode == Keys.Q)
@@ -201,8 +201,21 @@ namespace StepDX
                 }
                 else if (e.KeyCode == Keys.Space && stopwatch.ElapsedMilliseconds > lastShot + 410 - laserLevel*15)
                 {
-                    //TODO: Make the player shoot
-                    AddLaser(player.P);
+                    if (laserLevel > 5)
+                    {
+                        Vector2 q = player.P;
+                        AddLaser(new Vector2(q.X, q.Y - 0.1f));
+                        AddLaser(new Vector2(q.X, q.Y + 0.1f));
+                    }
+                    else if (laserLevel > 10)
+                    {
+                        Vector2 q = player.P;
+                        AddLaser(q);
+                        AddLaser(new Vector2(q.X, q.Y - 0.25f));
+                        AddLaser(new Vector2(q.X, q.Y + 0.25f));
+                    }
+                    else
+                        AddLaser(player.P);
                     sounds.Shoot();
                     lastShot = stopwatch.ElapsedMilliseconds;
                 }
